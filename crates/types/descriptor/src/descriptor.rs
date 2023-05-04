@@ -5,7 +5,7 @@ use std::collections::BTreeMap;
 pub type DescriptorId = ActionHash; // the
 
 #[hdk_entry_helper]
-#[derive(new,Clone)]
+#[derive(new,Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct SemanticVersion {
      major: u8,
@@ -14,7 +14,7 @@ pub struct SemanticVersion {
  }
 
 #[hdk_entry_helper]
-#[derive(new,Clone)]
+#[derive(new,Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum BaseType {
     Holon,
@@ -28,7 +28,7 @@ pub enum BaseType {
 }
 
 #[hdk_entry_helper]
-#[derive(new,Clone)]
+#[derive(new,Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct TypeHeader {
     // the shared attributes common to all Type Descriptors
@@ -41,7 +41,7 @@ pub struct TypeHeader {
 }
 
 #[hdk_entry_helper]
-#[derive(new,Clone)]
+#[derive(new,Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct HolonDescriptor {
     pub header: Box<TypeHeader>,
@@ -52,7 +52,7 @@ pub struct HolonDescriptor {
 
 
 #[hdk_entry_helper]
-#[derive(new,Clone)]
+#[derive(new,Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct BooleanDescriptor {
     header: TypeHeader,
@@ -81,7 +81,7 @@ pub struct BooleanDescriptor {
     Dependent types don't have unique identifiers
 */
 #[hdk_entry_helper]
-#[derive(new,Clone)]
+#[derive(new,Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum DependentTypeDescriptor {
     //Composite(CompositeDescriptor),
@@ -94,7 +94,7 @@ pub enum DependentTypeDescriptor {
 }
 
 #[hdk_entry_helper]
-#[derive(new,Clone)]
+#[derive(new,Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct IntegerDescriptor {
     header: TypeHeader,
@@ -103,7 +103,7 @@ pub struct IntegerDescriptor {
     max_value: u128,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum IntegerFormat {
     I8(),
@@ -119,7 +119,7 @@ pub enum IntegerFormat {
 }
 
 #[hdk_entry_helper]
-#[derive(new,Clone)]
+#[derive(new,Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct StringDescriptor {
     header: TypeHeader,
