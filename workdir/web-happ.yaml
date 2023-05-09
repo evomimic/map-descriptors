@@ -1,7 +1,0 @@
----
-manifest_version: "1"
-name: map-descriptors_integrity
-ui:
-  bundled: "../ui/dist.zip"
-happ_manifest:
-  bundled: "./map-descriptors_integrity.happ"
