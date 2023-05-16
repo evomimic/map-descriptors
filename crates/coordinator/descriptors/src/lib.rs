@@ -1,3 +1,5 @@
+pub mod queries;
+
 use hdk::prelude::*;
 use descriptors_integrity::*;
 

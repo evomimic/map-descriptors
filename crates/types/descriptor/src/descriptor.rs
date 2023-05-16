@@ -33,10 +33,10 @@ pub enum BaseType {
 pub struct TypeHeader {
     // the shared attributes common to all Type Descriptors
     pub type_name: String,
-    base_type: BaseType,
+    pub base_type: BaseType,
     pub description: String,
-    version: SemanticVersion,
-    is_dependent: bool, // if true, cannot existing independent of parent object
+    pub version: SemanticVersion,
+    pub is_dependent: bool, // if true, cannot existing independent of parent object
     // IRI? reference to semantic type?
 }
 
