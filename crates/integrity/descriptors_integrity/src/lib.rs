@@ -1,20 +1,22 @@
 use hdi::prelude::*;
-use types_descriptor::descriptor::{HolonDescriptor,};
+use types_descriptor::descriptor::{HolonDescriptor, BooleanDescriptor, IntegerDescriptor, StringDescriptor};
 
 #[hdk_entry_defs]
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
     #[entry_def(name = "HolonDescriptor", visibility = "public")]
     HolonDescriptor(HolonDescriptor),
+    //#[entry_def(name = "CollectionDescriptor", visibility = "public")]
     //Collection(CollectionDescriptor),
+    //#[entry_def(name = "CompositeDescriptor", visibility = "public")]
     //Composite(CompositeDescriptor),
     //Relationship(RelationshipDescriptor),
-    // #[entry_def(name = "BooleanDescriptor", visibility = "public")]
-    // Boolean(BooleanDescriptor),
-    // #[entry_def(name = "IntegerDescriptor", visibility = "public")]
-    // Integer(IntegerDescriptor),
-    // #[entry_def(name = "StringDescriptor", visibility = "public")]
-    // String(StringDescriptor),
+    #[entry_def(name = "BooleanDescriptor", visibility = "public")]
+    Boolean(BooleanDescriptor),
+    #[entry_def(name = "IntegerDescriptor", visibility = "public")]
+    Integer(IntegerDescriptor),
+    #[entry_def(name = "StringDescriptor", visibility = "public")]
+    String(StringDescriptor),
     // TODO: check if enum variant names conflict with keywords/std types
     // Enum(EnumDescriptor),
 }
