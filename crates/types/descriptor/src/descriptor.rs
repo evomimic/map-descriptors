@@ -45,7 +45,6 @@ pub struct TypeHeader {
 #[serde(rename_all = "camelCase")]
 pub struct HolonDescriptor {
     pub header: Box<TypeHeader>,
-    identifying_properties: Vec<String>,
     properties: BTreeMap<String, DependentTypeDescriptor>,
     // add actions and relationships
 }
