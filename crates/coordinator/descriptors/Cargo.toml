@@ -1,0 +1,20 @@
+[package]
+name = "descriptors"
+version = "0.0.1"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "descriptors"
+
+[dependencies]
+hdk = { workspace = true }
+hdi = { workspace = true }
+holochain_integrity_types = { workspace = true }
+
+serde = { workspace = true }
+
+descriptors_integrity = { workspace = true }
+types_descriptor = { workspace = true }
+
+
