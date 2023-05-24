@@ -21,6 +21,7 @@ pub enum EntryTypes {
     // Enum(EnumDescriptor),
 }
 
+/*
 /// Validation you perform during the genesis process. Nobody else on the network performs it, only you.
 /// There *is no* access to network calls in this callback
 #[hdk_extern]
@@ -183,3 +184,4 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
         },
     }
 }
+*/

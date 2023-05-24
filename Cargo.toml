@@ -5,6 +5,7 @@ opt-level = "z"
 opt-level = "z"
 
 [workspace]
+resolver = "2"
 members = [
     "crates/coordinator/descriptors",
     "crates/integrity/descriptors_integrity",

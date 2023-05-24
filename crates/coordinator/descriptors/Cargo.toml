@@ -13,8 +13,16 @@ hdi = { workspace = true }
 holochain_integrity_types = { workspace = true }
 
 serde = { workspace = true }
+derive-new = { workspace = true }
+thiserror = "1"
 
 descriptors_integrity = { workspace = true }
 types_descriptor = { workspace = true }
 
 
+[dev-dependencies]
+holochain = { version = "=0.1.4", default-features = false, features = [
+  "test_utils",
+] }
+tokio = { version = "1.3", features = ["full"] }
+futures = { version = "0.3.1", default-features = false }
