@@ -4,7 +4,7 @@ use std::collections::BTreeMap;
 
 use crate::type_header::create_type_header;
 
-use types_descriptor::HolonDescriptor;
+use types_descriptor::{BaseType, HolonDescriptor};
 
 pub fn create_holon_descriptor(
     type_name: String,
@@ -13,7 +13,7 @@ pub fn create_holon_descriptor(
 ) -> ExternResult<HolonDescriptor> {
     // TODO: Custom Error
 
-    let type_header = Box::new(create_type_header(type_name, description, is_dependent)?);
+    let type_header = Box::new(create_type_header(type_name, BaseType::Holon, description, is_dependent)?);
 
     let descriptor = HolonDescriptor::new(type_header, BTreeMap::default());
 
