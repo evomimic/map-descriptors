@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/crates/coordinator/descriptors/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/crates/integrity/descriptors_integrity/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/crates/types/descriptor/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/coordinator/descriptors/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

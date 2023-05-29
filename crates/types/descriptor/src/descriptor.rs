@@ -5,7 +5,7 @@ use std::collections::BTreeMap;
 pub type DescriptorId = ActionHash; // the
 
 #[hdk_entry_helper]
-#[derive(new,Clone, PartialEq, Eq)]
+#[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct SemanticVersion {
      major: u8,
@@ -13,8 +13,14 @@ pub struct SemanticVersion {
      patch: u8,
  }
 
+ impl Default for SemanticVersion {
+    fn default() -> Self {
+        SemanticVersion { major: 0, minor: 0, patch: 1 }
+    }
+}
+
 #[hdk_entry_helper]
-#[derive(new,Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum BaseType {
     Holon,
@@ -33,10 +39,10 @@ pub enum BaseType {
 pub struct TypeHeader {
     // the shared attributes common to all Type Descriptors
     pub type_name: String,
-    base_type: BaseType,
+    pub base_type: BaseType,
     pub description: String,
-    version: SemanticVersion,
-    is_dependent: bool, // if true, cannot existing independent of parent object
+    pub version: SemanticVersion,
+    pub is_dependent: bool, // if true, cannot existing independent of parent object
     // IRI? reference to semantic type?
 }
 
@@ -45,9 +51,17 @@ pub struct TypeHeader {
 #[serde(rename_all = "camelCase")]
 pub struct HolonDescriptor {
     pub header: Box<TypeHeader>,
-    properties: BTreeMap<String, DependentTypeDescriptor>,
+    pub properties: BTreeMap<String, DependentTypeDescriptor>,
     // add actions and relationships
 }
+
+// impl HolonDescriptor {
+//     pub fn add_string_property(&self, name: String, min_length: u32, max_length: u32, string_descriptor_id: DescriptorId) -> Self {
+        
+//         let property_descriptor = DependentTypeDescriptor::new_string(StringDescriptor::new( min_length, max_length))
+//         self.properties.insert(name, property_descriptor);
+//     }
+// }
 
 
 #[hdk_entry_helper]
@@ -57,7 +71,7 @@ pub struct BooleanDescriptor {
     header: TypeHeader,
     is_fuzzy: bool, // if true, this property has FuzzyBoolean value, otherwise just true or false
 }
-
+/*
     pub struct CollectionDescriptor {
         header: Box<TypeHeader>,
         contains_items_of_type: HolonDescriptor,
@@ -72,6 +86,7 @@ pub struct BooleanDescriptor {
         header: Box<TypeHeader>,
     //    properties: BtreeMap<String, DependentTypeDescriptor>,
     }
+*/
 
 /*
     The following enum specifies the subset TypeDescriptors whose instances cannot exist independent
@@ -80,7 +95,7 @@ pub struct BooleanDescriptor {
     Dependent types don't have unique identifiers
 */
 #[hdk_entry_helper]
-#[derive(new,Clone, PartialEq, Eq)]
+#[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum DependentTypeDescriptor {
     //Composite(CompositeDescriptor),
