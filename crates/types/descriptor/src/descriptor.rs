@@ -36,13 +36,13 @@ pub enum BaseType {
 #[hdk_entry_helper]
 #[derive(new,Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct TypeHeader {
-    // the shared attributes common to all Type Descriptors
+pub struct TypeHeader { // the shared attributes common to all Type Descriptors
     pub type_name: String,
     pub base_type: BaseType,
     pub description: String,
     pub version: SemanticVersion,
-    pub is_dependent: bool, // if true, cannot existing independent of parent object
+    pub is_dependent: bool, // if true, values of this type cannot existing independent of parent object
+    // FUTURE: pub is_shared_descriptor: bool, // if true, this descriptor itself is stored as a separately identified object
     // IRI? reference to semantic type?
 }
 
