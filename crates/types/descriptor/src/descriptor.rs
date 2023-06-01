@@ -1,5 +1,5 @@
-use hdi::prelude::*;
 use derive_new::new;
+use hdi::prelude::*;
 use std::collections::BTreeMap;
 
 pub type DescriptorId = ActionHash; // the
@@ -8,14 +8,18 @@ pub type DescriptorId = ActionHash; // the
 #[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct SemanticVersion {
-     major: u8,
-     minor: u8,
-     patch: u8,
- }
+    major: u8,
+    minor: u8,
+    patch: u8,
+}
 
- impl Default for SemanticVersion {
+impl Default for SemanticVersion {
     fn default() -> Self {
-        SemanticVersion { major: 0, minor: 0, patch: 1 }
+        SemanticVersion {
+            major: 0,
+            minor: 0,
+            patch: 1,
+        }
     }
 }
 
@@ -34,20 +38,57 @@ pub enum BaseType {
 }
 
 #[hdk_entry_helper]
-#[derive(new,Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-pub struct TypeHeader { // the shared attributes common to all Type Descriptors
+pub enum PropertyTypeConstraint {
+    Boolean(BooleanConstraint),
+    Integer(IntegerConstraint),
+    Stringy(StringConstraint),
+
+
+}
+
+#[hdk_entry_helper]
+#[derive(Clone, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct BooleanConstraint {
+    is_fuzzy: bool
+}
+
+#[hdk_entry_helper]
+#[derive(Clone, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct IntegerConstraint {
+    format: IntegerFormat,
+    min_value: u128,
+    max_value: u128,
+}
+
+#[hdk_entry_helper]
+#[derive(Clone, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct StringConstraint {
+    min_length: u32,
+    max_length: u32,
+    //pattern: String
+}
+
+#[hdk_entry_helper]
+#[derive(new, Clone, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct TypeHeader {
+    // the shared attributes common to all Type Descriptors
     pub type_name: String,
     pub base_type: BaseType,
     pub description: String,
     pub version: SemanticVersion,
     pub is_dependent: bool, // if true, values of this type cannot existing independent of parent object
-    // FUTURE: pub is_shared_descriptor: bool, // if true, this descriptor itself is stored as a separately identified object
-    // IRI? reference to semantic type?
+    pub is_shared_descriptor: bool, // if true, this descriptor itself is stored as a separately identified object
+                            // IRI? reference to semantic type?
 }
 
 #[hdk_entry_helper]
-#[derive(new,Clone, PartialEq, Eq)]
+#[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct HolonDescriptor {
     pub header: Box<TypeHeader>,
@@ -55,17 +96,46 @@ pub struct HolonDescriptor {
     // add actions and relationships
 }
 
-// impl HolonDescriptor {
-//     pub fn add_string_property(&self, name: String, min_length: u32, max_length: u32, string_descriptor_id: DescriptorId) -> Self {
-        
-//         let property_descriptor = DependentTypeDescriptor::new_string(StringDescriptor::new( min_length, max_length))
-//         self.properties.insert(name, property_descriptor);
-//     }
-// }
-
+impl HolonDescriptor {
+    pub fn add_property_descriptor(
+        &self,
+        property_name: String,
+        base_type: BaseType,
+        type_name: String,
+        description: String,
+        constraints: PropertyTypeConstraint,
+    ) -> ExternResult<Self> {
+        match constraints {
+            PropertyTypeConstraint::Boolean(constraint) => match constraint {
+                DependentTypeDescriptor::Boolean(boolean_descriptor) => {
+                    self.properties.insert(
+                        property_name,
+                        DependentTypeDescriptor::Boolean(boolean_descriptor),
+                    );
+                    return Ok(self.clone());
+                }
+                DependentTypeDescriptor::Integer(integer_descriptor) => {
+                    self.properties.insert(
+                        property_name,
+                        DependentTypeDescriptor::Integer(integer_descriptor),
+                    );
+                    return Ok(self.clone());
+                }
+                DependentTypeDescriptor::Stringy(string_descriptor) => {
+                    self.properties.insert(
+                        property_name,
+                        DependentTypeDescriptor::Stringy(string_descriptor),
+                    );
+                    return Ok(self.clone());
+                }
+            },
+            _ => return Err(wasm_error!("Only dedicated types for now")),
+        }
+    }
+}
 
 #[hdk_entry_helper]
-#[derive(new,Clone, PartialEq, Eq)]
+#[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct BooleanDescriptor {
     header: TypeHeader,
@@ -103,12 +173,12 @@ pub enum DependentTypeDescriptor {
     // but only for collections of Dependent Types
     Boolean(BooleanDescriptor),
     Integer(IntegerDescriptor),
-    String(StringDescriptor),
-    //Enum(EnumDescriptor),
+    Stringy(StringDescriptor), // String renamed to avoid compiler conflict // is this necessary?
+                               //Enum(EnumDescriptor),
 }
 
 #[hdk_entry_helper]
-#[derive(new,Clone, PartialEq, Eq)]
+#[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct IntegerDescriptor {
     header: TypeHeader,
@@ -133,7 +203,7 @@ pub enum IntegerFormat {
 }
 
 #[hdk_entry_helper]
-#[derive(new,Clone, PartialEq, Eq)]
+#[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct StringDescriptor {
     header: TypeHeader,
