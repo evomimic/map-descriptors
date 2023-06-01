@@ -2,10 +2,10 @@ pub mod mutators;
 pub mod queries;
 pub mod type_header;
 
-// use hdk::prelude::*;
+use hdk::prelude::*;
 // use descriptors_integrity::*;
 
-/*
+
 /// Called the first time a zome call is made to the cell containing this zome
 #[hdk_extern]
 pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
@@ -33,4 +33,4 @@ pub fn post_commit(committed_actions: Vec<SignedActionHashed>) {
 fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
     Ok(())
 }
-*/
+
