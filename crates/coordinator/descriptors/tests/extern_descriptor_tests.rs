@@ -5,8 +5,9 @@
 
 use hdk::prelude::*;
 use holochain::sweettest::{SweetAgents, SweetCell, SweetConductor, SweetDnaFile};
+use types_descriptor::holon_descriptor::HolonDescriptor;
 
-use types_descriptor::HolonDescriptor;
+
 
 const DNA_FILEPATH: &str = "../../workdir/map_descriptors.dna";
 

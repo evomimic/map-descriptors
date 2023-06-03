@@ -1,24 +1,28 @@
 use hdi::prelude::*;
-use types_descriptor::descriptor::{HolonDescriptor, BooleanDescriptor, IntegerDescriptor, StringDescriptor};
+
+use types_descriptor::holon_descriptor::{HolonDescriptor,HolonCollectionDescriptor};
+use types_descriptor::property_descriptor::{BooleanDescriptor,CompositeDescriptor, IntegerDescriptor, StringDescriptor};
+use types_descriptor::relationship_descriptor::RelationshipDescriptor;
 
 #[hdk_entry_defs]
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
-    #[entry_def(name = "HolonDescriptor", visibility = "public")]
-    HolonDescriptor(HolonDescriptor),
-    //#[entry_def(name = "CollectionDescriptor", visibility = "public")]
-    //Collection(CollectionDescriptor),
-    //#[entry_def(name = "CompositeDescriptor", visibility = "public")]
-    //Composite(CompositeDescriptor),
-    //Relationship(RelationshipDescriptor),
     #[entry_def(name = "BooleanDescriptor", visibility = "public")]
     Boolean(BooleanDescriptor),
+    #[entry_def(name = "CompositeDescriptor", visibility = "public")]
+    Composite(CompositeDescriptor),
+    //#[entry_def(name = "EnumDescriptor", visibility = "public")]
+    //Enum(EnumDescriptor),
+    #[entry_def(name = "HolonDescriptor", visibility = "public")]
+    Holon(HolonDescriptor),
+    #[entry_def(name = "HolonCollectionDescriptor", visibility = "public")]
+    HolonCollection(HolonCollectionDescriptor),
     #[entry_def(name = "IntegerDescriptor", visibility = "public")]
     Integer(IntegerDescriptor),
+    #[entry_def(name = "RelationshipDescriptor", visibility = "public")]
+    Relationship(RelationshipDescriptor),
     #[entry_def(name = "StringDescriptor", visibility = "public")]
     String(StringDescriptor),
-    // TODO: check if enum variant names conflict with keywords/std types
-    // Enum(EnumDescriptor),
 }
 
 /*

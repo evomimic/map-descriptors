@@ -1,146 +1,4 @@
-use derive_new::new;
-use hdi::prelude::*;
-use std::collections::BTreeMap;
 
-pub type DescriptorId = ActionHash; // the
-
-#[hdk_entry_helper]
-#[derive(new, Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct SemanticVersion {
-    major: u8,
-    minor: u8,
-    patch: u8,
-}
-
-impl Default for SemanticVersion {
-    fn default() -> Self {
-        SemanticVersion {
-            major: 0,
-            minor: 0,
-            patch: 1,
-        }
-    }
-}
-
-#[hdk_entry_helper]
-#[derive(Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub enum BaseType {
-    Holon,
-    Collection,
-    Composite,
-    Relationship,
-    Boolean,
-    Integer,
-    String,
-    Enum,
-}
-
-#[hdk_entry_helper]
-#[derive(Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub enum PropertyTypeConstraint {
-    Boolean(BooleanConstraint),
-    Integer(IntegerConstraint),
-    Stringy(StringConstraint),
-
-
-}
-
-#[hdk_entry_helper]
-#[derive(Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct BooleanConstraint {
-    is_fuzzy: bool
-}
-
-#[hdk_entry_helper]
-#[derive(Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct IntegerConstraint {
-    format: IntegerFormat,
-    min_value: u128,
-    max_value: u128,
-}
-
-#[hdk_entry_helper]
-#[derive(Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct StringConstraint {
-    min_length: u32,
-    max_length: u32,
-    //pattern: String
-}
-
-#[hdk_entry_helper]
-#[derive(new, Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct TypeHeader {
-    // the shared attributes common to all Type Descriptors
-    pub type_name: String,
-    pub base_type: BaseType,
-    pub description: String,
-    pub version: SemanticVersion,
-    pub is_dependent: bool, // if true, values of this type cannot existing independent of parent object
-    pub is_shared_descriptor: bool, // if true, this descriptor itself is stored as a separately identified object
-                            // IRI? reference to semantic type?
-}
-
-#[hdk_entry_helper]
-#[derive(new, Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct HolonDescriptor {
-    pub header: Box<TypeHeader>,
-    pub properties: BTreeMap<String, DependentTypeDescriptor>,
-    // add actions and relationships
-}
-
-impl HolonDescriptor {
-    pub fn add_property_descriptor(
-        &self,
-        property_name: String,
-        base_type: BaseType,
-        type_name: String,
-        description: String,
-        constraints: PropertyTypeConstraint,
-    ) -> ExternResult<Self> {
-        match constraints {
-            PropertyTypeConstraint::Boolean(constraint) => match constraint {
-                DependentTypeDescriptor::Boolean(boolean_descriptor) => {
-                    self.properties.insert(
-                        property_name,
-                        DependentTypeDescriptor::Boolean(boolean_descriptor),
-                    );
-                    return Ok(self.clone());
-                }
-                DependentTypeDescriptor::Integer(integer_descriptor) => {
-                    self.properties.insert(
-                        property_name,
-                        DependentTypeDescriptor::Integer(integer_descriptor),
-                    );
-                    return Ok(self.clone());
-                }
-                DependentTypeDescriptor::Stringy(string_descriptor) => {
-                    self.properties.insert(
-                        property_name,
-                        DependentTypeDescriptor::Stringy(string_descriptor),
-                    );
-                    return Ok(self.clone());
-                }
-            },
-            _ => return Err(wasm_error!("Only dedicated types for now")),
-        }
-    }
-}
-
-#[hdk_entry_helper]
-#[derive(new, Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct BooleanDescriptor {
-    header: TypeHeader,
-    is_fuzzy: bool, // if true, this property has FuzzyBoolean value, otherwise just true or false
-}
 /*
     pub struct CollectionDescriptor {
         header: Box<TypeHeader>,
@@ -159,96 +17,33 @@ pub struct BooleanDescriptor {
 */
 
 /*
-    The following enum specifies the subset TypeDescriptors whose instances cannot exist independent
-    of a parent instance.
+fn create_property_descriptor(header: Box<TypeHeader>, constraints: Box<PropertyTypeConstraint>)-> ExternResult<Box<PropertyDescriptor>> {
+    Ok(Box::new(PropertyDescriptor::new( header, constraints)))
+    }
 
-    Dependent types don't have unique identifiers
+impl HolonDescriptor {
+    pub fn add_property_descriptor(
+        &mut self,
+        property_name: String,
+        base_type: BaseType,
+        type_name: String,
+        description: String,
+        is_dependent: bool,
+        constraints: Box<PropertyTypeConstraint>,
+    ) -> ExternResult<Self> {
+        // TODO: Add guard check that base_type = constraints type
+
+        // Create a TypeHeader
+        let header = create_type_header(
+            type_name, base_type, description, is_dependent: bool,
+        )?;
+        // Create a PropertyTypeDescriptor that includes that TypeHeader
+        let property_descriptor : PropertyDescriptor = create_property_descriptor(header, constraints)?;
+
+        // Add the new PropertyTypeDescriptor to the properties B-Tree
+        self.properties.insert(property_name, property_descriptor);
+        Ok(self.clone())
+    }
+}
 */
-#[hdk_entry_helper]
-#[derive(new, Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub enum DependentTypeDescriptor {
-    //Composite(CompositeDescriptor),
-    //Collection(CollectionDescriptor),
-    // but only for collections of Dependent Types
-    Boolean(BooleanDescriptor),
-    Integer(IntegerDescriptor),
-    Stringy(StringDescriptor), // String renamed to avoid compiler conflict // is this necessary?
-                               //Enum(EnumDescriptor),
-}
 
-#[hdk_entry_helper]
-#[derive(new, Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct IntegerDescriptor {
-    header: TypeHeader,
-    format: IntegerFormat,
-    min_value: u128,
-    max_value: u128,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub enum IntegerFormat {
-    I8(),
-    I16(),
-    I32(),
-    I64(),
-    I128(),
-    U8(),
-    U16(),
-    U32(),
-    U64(),
-    U128(),
-}
-
-#[hdk_entry_helper]
-#[derive(new, Clone, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct StringDescriptor {
-    header: TypeHeader,
-    min_length: u32,
-    max_length: u32,
-    //pattern: String,
-}
-/*
-    pub struct RelationshipDescriptor {
-        header: Box<TypeHeader>,
-        source_role: RelationshipRole,
-        target_role: RelationshipRole,
-    }
-
-    pub struct RelationshipRole {
-        role_name: String,
-        holon_type: HolonDescriptor,
-        binding_rule: RelationshipBindingRule,
-        max_multiplicity: u32,
-        min_multiplicity: u32,
-        deletion_semantic: DeletionSemantic,
-        attraction: UnitInterval,
-
-    }
-
-    pub enum RelationshipBindingRule {
-        Auto,
-        // automatically bind to new version of related holon type
-        Manual, // manually decide when to bind to new version of related holon type
-    }
-
-    pub enum DeletionSemantic {
-        Block,
-        // prevent deletion of Holon if any Holons are related
-        Propagate,
-        // propagate deletion of Holon to related Holons
-        Allow, // do nothing with the related Holon
-    }
-
-    pub struct UnitInterval {
-        value: f32, // value can range from 0 to 1, inclusive
-    }
-
-    struct FuzzyBoolean {
-        value: UnitInterval, // zero = false, one = true
-    }
-
-*/
