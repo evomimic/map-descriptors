@@ -25,26 +25,26 @@ pub enum PropertyDescriptor {
 #[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct BooleanDescriptor {
-    header: TypeHeader,
-    is_fuzzy: bool, // if true, this property has FuzzyBoolean value, otherwise just true or false
+    pub header: TypeHeader,
+    pub is_fuzzy: bool, // if true, this property has FuzzyBoolean value, otherwise just true or false
 }
 
 #[hdk_entry_helper]
 #[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CompositeDescriptor {
-    header: Box<TypeHeader>,
-    properties: BTreeMap<String, PropertyDescriptor>,
+    pub header: TypeHeader,
+    pub properties: BTreeMap<String, PropertyDescriptor>,
 }
 
 #[hdk_entry_helper]
 #[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct IntegerDescriptor {
-    header: TypeHeader,
-    format: IntegerFormat,
-    min_value: u128,
-    max_value: u128,
+    pub header: TypeHeader,
+    pub format: IntegerFormat,
+    pub min_value: u128,
+    pub max_value: u128,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
@@ -66,24 +66,25 @@ pub enum IntegerFormat {
 #[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct StringDescriptor {
-    header: TypeHeader,
-    min_length: u32,
-    max_length: u32,
+    pub header: TypeHeader,
+    pub min_length: u32,
+    pub max_length: u32,
     //pattern: String,
 }
 
 // This is just a first cut at ValueCollectionDescriptor
-// It identifies the kinds of items the collection contains
+// It identifies the kinds of items the collection contains via a string
+
 #[hdk_entry_helper]
 #[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct ValueCollectionDescriptor {
-    header: Box<TypeHeader>,
-    contains_items_of_type: String, // TODO: replace this with a ref
-    min_items: u32,
-    max_items: u32,
-    unique_items: bool, // true means duplicate items are not allowed
-    is_ordered: bool, // if items have an intrinsic order
+    pub header: TypeHeader,
+    pub contains_items_of_type: String, // TODO: replace this with a ref
+    pub min_items: u32,
+    pub max_items: u32,
+    pub unique_items: bool, // true means duplicate items are not allowed
+    pub is_ordered: bool, // if items have an intrinsic order
 }
 
 

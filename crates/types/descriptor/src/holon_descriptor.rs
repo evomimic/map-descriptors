@@ -2,7 +2,7 @@ use derive_new::new;
 use hdi::prelude::*;
 use std::collections::BTreeMap;
 
-use crate::property_descriptor::{CompositeDescriptor, PropertyDescriptor};
+use crate::property_descriptor::{PropertyDescriptor};
 use crate::type_header::TypeHeader;
 
 
@@ -10,8 +10,8 @@ use crate::type_header::TypeHeader;
 #[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct HolonDescriptor {
-    pub header: Box<TypeHeader>,
-    pub properties: CompositeDescriptor,
+    pub header: TypeHeader,
+    pub properties: BTreeMap<String, PropertyDescriptor>,
     // add actions and relationships
 }
 
@@ -19,10 +19,10 @@ pub struct HolonDescriptor {
 #[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct HolonCollectionDescriptor {
-    header: Box<TypeHeader>,
-    contains_items_of_type: HolonDescriptor,
-    min_items: u32,
-    max_items: u32,
-    unique_items: bool,  // true means duplicate items are not allowed
-    is_ordered: bool, // if items have an intrinsic order (e.g., is_ordered=false mathematical set)
+    pub header: TypeHeader,
+    pub contains_items_of_type: HolonDescriptor,
+    pub min_items: u32,
+    pub max_items: u32,
+    pub unique_items: bool,  // true means duplicate items are not allowed
+    pub is_ordered: bool, // if items have an intrinsic order (e.g., is_ordered=false mathematical set)
 }

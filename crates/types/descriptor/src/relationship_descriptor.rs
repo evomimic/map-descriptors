@@ -10,22 +10,22 @@ use crate::value_types::UnitInterval;
 #[derive(new, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct RelationshipDescriptor {
-    header: Box<TypeHeader>,
-    source_role: RelationshipRole,
-    target_role: RelationshipRole,
+    pub header: TypeHeader,
+    pub source_role: RelationshipRole,
+    pub target_role: RelationshipRole,
 }
 
 #[hdk_entry_helper]
 #[derive(new, Clone, PartialEq,  Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct RelationshipRole {
-    role_name: String,
-    holon_type: HolonDescriptor,
-    binding_rule: RelationshipBindingRule,
-    max_multiplicity: u32,
-    min_multiplicity: u32,
-    deletion_semantic: DeletionSemantic,
-    attraction: UnitInterval,
+    pub role_name: String,
+    pub holon_type: HolonDescriptor,
+    pub binding_rule: RelationshipBindingRule,
+    pub max_multiplicity: u32,
+    pub min_multiplicity: u32,
+    pub deletion_semantic: DeletionSemantic,
+    pub attraction: UnitInterval,
 
 }
 

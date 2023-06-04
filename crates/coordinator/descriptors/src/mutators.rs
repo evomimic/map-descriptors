@@ -4,7 +4,7 @@ use std::collections::BTreeMap;
 
 
 use types_descriptor::holon_descriptor::HolonDescriptor;
-use types_descriptor::property_descriptor::PropertyDescriptor;
+use types_descriptor::property_descriptor::{CompositeDescriptor, PropertyDescriptor};
 use types_descriptor::type_header::{BaseType,SemanticVersion,TypeHeader};
 
 pub fn create_type_header(
@@ -12,11 +12,31 @@ pub fn create_type_header(
     base_type : BaseType,
     description: String,
     is_dependent: bool,
-) -> ExternResult<Box<TypeHeader>> {
-    let header = Box::new(TypeHeader::new(
-        type_name, base_type, description, SemanticVersion::default(), is_dependent));
+) -> ExternResult<TypeHeader> {
+    let header = TypeHeader::new(
+        type_name, base_type, description, SemanticVersion::default(), is_dependent);
 
     Ok(header)
+}
+
+/// new_composite_descriptor stages a new (empty) CompositeDescriptor
+pub fn new_composite_descriptor(
+    type_name: String,
+    description: String,
+    is_dependent: bool,
+) -> ExternResult<CompositeDescriptor> {
+    // TODO: Custom Error
+
+    let type_header = create_type_header(
+        type_name,
+        BaseType::Holon,
+        description,
+        is_dependent,
+    )?;
+
+    let descriptor = CompositeDescriptor::new(type_header, BTreeMap::new());
+
+    Ok(descriptor)
 }
 
 
@@ -35,7 +55,7 @@ pub fn create_holon_descriptor(
         is_dependent,
     )?;
 
-    let descriptor = HolonDescriptor::new(type_header, BTreeMap::default());
+    let descriptor = HolonDescriptor::new(type_header, BTreeMap::new());
 
     Ok(descriptor)
 }
