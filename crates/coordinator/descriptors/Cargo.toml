@@ -18,6 +18,7 @@ thiserror = "1"
 
 descriptors_integrity = { workspace = true }
 types_descriptor = { workspace = true }
+types_builder = {workspace = true}
 
 
 [dev-dependencies]

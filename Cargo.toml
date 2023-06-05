@@ -27,3 +27,6 @@ path = "crates/integrity/descriptors_integrity"
 
 [workspace.dependencies.types_descriptor]
 path = "crates/types/descriptor"
+
+[workspace.dependencies.types_builder]
+path = "crates/types/builder"

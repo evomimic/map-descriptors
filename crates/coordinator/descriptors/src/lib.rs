@@ -1,6 +1,8 @@
 pub mod mutators;
 pub mod queries;
 mod stub_data_creator;
+mod property_map_builder;
+
 
 
 // use hdk::prelude::*;
