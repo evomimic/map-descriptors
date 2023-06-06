@@ -9,7 +9,8 @@ resolver = "2"
 members = [
     "crates/coordinator/descriptors",
     "crates/integrity/descriptors_integrity",
-    "crates/types/descriptor"
+    "crates/types/descriptor",
+    "crates/types/builder"
 ]
 
 [workspace.dependencies]
