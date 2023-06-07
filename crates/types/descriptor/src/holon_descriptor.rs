@@ -2,7 +2,7 @@ use derive_new::new;
 use hdi::prelude::*;
 use std::collections::BTreeMap;
 
-use crate::property_descriptor::{PropertyDescriptor};
+use crate::property_descriptor::{PropertyDescriptor, PropertyMap};
 use crate::type_header::TypeHeader;
 
 
@@ -11,7 +11,7 @@ use crate::type_header::TypeHeader;
 #[serde(rename_all = "camelCase")]
 pub struct HolonDescriptor {
     pub header: TypeHeader,
-    pub properties: BTreeMap<String, PropertyDescriptor>,
+    pub properties: PropertyMap,
     // add actions and relationships
 }
 

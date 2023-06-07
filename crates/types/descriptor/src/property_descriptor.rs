@@ -5,6 +5,18 @@ use std::collections::BTreeMap;
 use crate::type_header::TypeHeader;
 use crate::value_types::UnitInterval;
 
+/// PropertyMap contains a set of (property_name, PropertyDescriptor) pairs
+/// that can be used in various contexts. For example, by HolonDescriptor and CompositeDescriptor
+///
+
+#[hdk_entry_helper]
+#[derive(new, Clone, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct PropertyMap {
+    pub properties: BTreeMap<String, PropertyDescriptor>,
+}
+
+///
 /// PropertyDescriptor enumerates the subset of TypeDescriptors whose instances cannot exist
 /// independent of a parent instance. In other words, they cannot be identified or stored
 /// independently of their parent instance
@@ -34,7 +46,7 @@ pub struct BooleanDescriptor {
 #[serde(rename_all = "camelCase")]
 pub struct CompositeDescriptor {
     pub header: TypeHeader,
-    pub properties: BTreeMap<String, PropertyDescriptor>,
+    pub properties: PropertyMap,
 }
 
 #[hdk_entry_helper]
@@ -43,8 +55,8 @@ pub struct CompositeDescriptor {
 pub struct IntegerDescriptor {
     pub header: TypeHeader,
     pub format: IntegerFormat,
-    pub min_value: u128,
-    pub max_value: u128,
+    pub min_value: i128,
+    pub max_value: i128,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
