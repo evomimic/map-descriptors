@@ -22,5 +22,8 @@
   },
   "engines": {
     "npm": ">=7.0.0"
+  },
+  "dependencies": {
+    "@holochain/tryorama": "^0.14.0-rc.0"
   }
 }

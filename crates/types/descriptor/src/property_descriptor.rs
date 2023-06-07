@@ -3,7 +3,7 @@ use hdi::prelude::*;
 use std::collections::BTreeMap;
 
 use crate::type_header::TypeHeader;
-use crate::value_types::UnitInterval;
+
 
 /// PropertyMap contains a set of (property_name, PropertyDescriptor) pairs
 /// that can be used in various contexts. For example, by HolonDescriptor and CompositeDescriptor

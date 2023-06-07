@@ -1,10 +1,9 @@
 // use core::fmt::Error;
 use hdk::prelude::*;
-use std::collections::BTreeMap;
 
 use types_descriptor::holon_descriptor::HolonDescriptor;
 use types_descriptor::property_descriptor::{BooleanDescriptor, CompositeDescriptor, IntegerDescriptor, IntegerFormat, PropertyDescriptor, PropertyMap, StringDescriptor};
-use types_descriptor::type_header::{BaseType, SemanticVersion, TypeHeader};
+use types_descriptor::type_header::{BaseType};
 use crate::type_header_mutators::new_type_header;
 
 /// new_xxx_descriptor () functions stage new (empty) instances of Descriptors, but do NOT

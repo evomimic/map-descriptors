@@ -1,8 +1,8 @@
 use derive_new::new;
 use hdi::prelude::*;
-use std::collections::BTreeMap;
 
-use crate::property_descriptor::{PropertyDescriptor, PropertyMap};
+
+use crate::property_descriptor::{PropertyMap};
 use crate::type_header::TypeHeader;
 
 
