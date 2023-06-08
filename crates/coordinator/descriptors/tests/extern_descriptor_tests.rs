@@ -7,8 +7,6 @@ use hdk::prelude::*;
 use holochain::sweettest::{SweetAgents, SweetCell, SweetConductor, SweetDnaFile};
 use types_descriptor::holon_descriptor::HolonDescriptor;
 
-
-
 const DNA_FILEPATH: &str = "../../workdir/map_descriptors.dna";
 
 #[tokio::test(flavor = "multi_thread")]
@@ -53,60 +51,40 @@ async fn setup_conductor() -> (SweetConductor, AgentPubKey, SweetCell) {
     (conductor, agent, cell)
 }
 
-//// SAVE
+#[tokio::test(flavor = "multi_thread")]
+pub async fn test_get_all_holon_descriptor_entries() {
+    let (conductor, _agent, cell1): (SweetConductor, AgentPubKey, SweetCell) =
+        setup_conductor().await;
 
-// #[tokio::test(flavor = "multi_thread")]
-// pub async fn test_get_all_holons() {
+    let descriptors: Vec<HolonDescriptor> = conductor
+        .call(&cell1.zome("descriptors"), "get_all_holontypes", ())
+        .await;
 
-//   let (conductor, _agent, cell1): (SweetConductor, AgentPubKey, SweetCell) =
-//     setup_conductor().await;
+    println!("{:?}", descriptors);
 
-//   let descriptors: Vec<HolonDescriptor> = conductor
-//     .call(&cell.zome("hc_zome_coordination_holons"), "get_all_holon_types")
-//     .await;
+    let action_hashes: Vec<ActionHash> = Vec::new();
 
-//   println!(descriptors);
+    for descriptor in descriptors {
+        let hash = conductor
+            .call(
+                &cell1.zome("descriptors"),
+                "commit_holon_descriptor",
+                descriptor,
+            )
+            .await;
+        action_hashes.push(hash);
+    }
 
-//   let action_hash1: ActionHash = conductor
-//     .call(&cell.zome("hc_zome_coordination_holons"), "create__hc_entry", descriptors[0])
-//     .await;
+    let holons: Vec<HolonDescriptor> = Vec::new();
 
-//   let holon1: HolonDescriptor = conductor
-//     .call(
-//       &cell.zome("map_proto1"),
-//       "get_entry_by_actionhash",
-//       action_hash1,
-//     )
-//     .await;
+    for hash in action_hashes {
+        let entry = conductor
+            .call(&cell1.zome("map_proto1"), "get_entry_by_actionhash", hash)
+            .await;
+    }
+    holons.push(entry);
 
-//   let action_hash2: ActionHash = conductor
-//     .call(&cell.zome("hc_zome_coordination_holons"), "create_hc_entry", descriptors[1])
-//     .await;
+    println!("{:?}", holons);
 
-//   let holon2: HolonDescriptor = conductor
-//   .call(
-//     &cell.zome("map_proto1"),
-//     "get_entry_by_actionhash",
-//     action_hash2,
-//   )
-//   .await;
-
-//   let action_hash3: ActionHash = conductor
-//   .call(&cell.zome("hc_zome_coordination_holons"), "create_hc_entry", descriptors[2])
-//   .await;
-
-//   let holon3: HolonDescriptor = conductor
-//     .call(
-//       &cell.zome("map_proto1"),
-//       "get_entry_by_actionhash",
-//       action_hash3,
-//     )
-//     .await;
-
-//   let holons: Vec<HolonDescriptor> = vec![holon1, holon2, holon3];
-
-//   println!(holons);
-
-//   assert_eq!(holons, descriptors);
-
-// }
+    assert_eq!(holons, descriptors);
+}
